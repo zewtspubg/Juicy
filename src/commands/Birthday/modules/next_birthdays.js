@@ -18,8 +18,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         createEmbed({
-                            title: '❌ No Birthdays Found',
-                            description: 'No birthdays have been set up in this server yet. Use `/birthday set` to add birthdays!',
+                            title: '❌ Nu au fost gasiti alti sarbatoriti.',
+                            description: 'Inca nu sunt zile de nastere setate pe server . Foloseste /birthday set pentru a o seta!',
                             color: 'error'
                         })
                     ]
@@ -27,8 +27,8 @@ export default {
             }
 
             const embed = createEmbed({
-                title: '🎂 Next 5 Upcoming Birthdays',
-                description: `Here are the next 5 birthdays in ${interaction.guild.name}:`,
+                title: '🎂 Urmatorii 5 sarbatoriti.',
+                description: `Acestia sunt urmatorii 5 sarbatoriti de pe ${interaction.guild.name}:`,
                 color: 'info'
             });
 
@@ -61,8 +61,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         createEmbed({
-                            title: '❌ No Upcoming Birthdays',
-                            description: 'No upcoming birthdays found for current server members.',
+                            title: '❌ Nu sunt zile de nastere care vor veni',
+                            description: 'Nu au fost gasite urmatoarele zile de nastere.',
                             color: 'error'
                         })
                     ]
@@ -70,7 +70,7 @@ export default {
             }
 
             embed.setFooter({
-                text: 'Use /birthday set to add your birthday!',
+                text: 'Foloseste comanda /birthday set pentru a ti seta ziua!',
                 iconURL: interaction.guild.iconURL()
             });
 
