@@ -10,8 +10,8 @@ export default {
         try {
             await InteractionHelper.safeDefer(interaction);
 
-            const month = interaction.options.getInteger("Luna");
-            const day = interaction.options.getInteger("Ziua");
+            const month = interaction.options.getInteger("Month");
+            const day = interaction.options.getInteger("Day");
             const userId = interaction.user.id;
             const guildId = interaction.guildId;
 
