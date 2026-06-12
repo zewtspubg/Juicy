@@ -25,7 +25,7 @@ const WORK_JOBS = [
 export default {
     data: new SlashCommandBuilder()
         .setName('work')
-        .setDescription('Work to earn some money'),
+        .setDescription('Lucreaza pentru a face bani!'),
 
     execute: withErrorHandling(async (interaction, config, client) => {
         const deferred = await InteractionHelper.safeDefer(interaction);
@@ -98,7 +98,7 @@ export default {
             });
 
             const embed = successEmbed(
-                "💼 Work Complete!",
+                "Ai terminat munca!💼",
                 `You worked as a **${job}** and earned **$${earned.toLocaleString()}**!${multiplierMessage}`
             )
                 .addFields(
