@@ -10,8 +10,8 @@ export default {
         try {
             await InteractionHelper.safeDefer(interaction);
 
-            const month = interaction.options.getInteger("month");
-            const day = interaction.options.getInteger("day");
+            const month = interaction.options.getInteger("Luna");
+            const day = interaction.options.getInteger("Ziua");
             const userId = interaction.user.id;
             const guildId = interaction.guildId;
 
@@ -20,8 +20,8 @@ export default {
             
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [successEmbed(
-                    `Your birthday has been set to **${result.data.monthName} ${result.data.day}**!`,
-                    "Birthday Set! 🎂"
+                    `Ziua ta de nastere a fost setata pe data de **${result.data.monthName} ${result.data.day}**!`,
+                    "Zi de nastere setata! 🎂"
                 )]
             });
         } catch (error) {
