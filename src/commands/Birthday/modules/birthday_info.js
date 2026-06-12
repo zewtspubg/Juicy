@@ -22,23 +22,23 @@ export default {
                     embeds: [createEmbed({
                         title: '❌ No Birthday Found',
                         description: targetUser.id === interaction.user.id 
-                            ? "You haven't set your birthday yet. Use `/birthday set` to add it!"
-                            : `${targetUser.username} hasn't set their birthday yet.`,
+                            ? "Inca nu ai ziua de nastere setata. Foloseste comanda /birthday set pentru a o adauga!"
+                            : `${targetUser.username} inca nu are ziua de nastere setata.`,
                         color: 'error'
                     })]
                 });
             }
             
             const embed = createEmbed({
-                title: "🎂 Birthday Information",
-                description: `**Date:** ${birthdayData.monthName} ${birthdayData.day}\n**User:** ${targetUser.toString()}`,
+                title: "🎂 Informatii despre {user}",
+                description: `**Data:** ${birthdayData.monthName} ${birthdayData.day}\n**Persoana:** ${targetUser.toString()}`,
                 color: 'info',
-                footer: targetUser.id === interaction.user.id ? "Your Birthday" : `${targetUser.username}'s Birthday`
+                footer: targetUser.id === interaction.user.id ? "Ziua ta de nastere!" : `${targetUser.username}'s Birthday`
             });
             
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
             
-            logger.info('Birthday info retrieved successfully', {
+            logger.info('Informatiile au fost luate!', {
                 userId: interaction.user.id,
                 targetUserId: targetUser.id,
                 guildId,
