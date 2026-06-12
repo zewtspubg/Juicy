@@ -39,11 +39,11 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('info')
-                .setDescription('View birthday information')
+                .setDescription('Vezi informatii despre ziua de nastere.')
                 .addUserOption(option =>
                     option
                         .setName('user')
-                        .setDescription('User to check birthday for')
+                        .setDescription('Gaseste informatii si despre altii!')
                         .setRequired(false)
                 )
         )
