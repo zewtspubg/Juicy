@@ -30,7 +30,7 @@ export default {
             }
             
             const embed = createEmbed({
-                title: "🎂 Informatii despre {user}",
+                title: "🎂 Informatii despre tine",
                 description: `**Data:** ${birthdayData.monthName} ${birthdayData.day}\n**Persoana:** ${targetUser.toString()}`,
                 color: 'info',
                 footer: targetUser.id === interaction.user.id ? "Ziua ta de nastere!" : `${targetUser.username}'s Birthday`
