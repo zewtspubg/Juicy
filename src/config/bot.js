@@ -41,7 +41,7 @@ export const botConfig = {
     owners: process.env.OWNER_IDS?.split(",") || [],
 
     // Default wait time between command uses (in seconds).
-    defaultCooldown: 3, 
+    defaultCooldown: 5, 
 
     // If true, old commands are removed before re-registering.
     deleteCommands: false,
@@ -56,16 +56,16 @@ export const botConfig = {
   applications: {
     // Default questions shown when someone fills out an application.
     defaultQuestions: [
-      { question: "What is your name?", required: true },
-      { question: "How old are you?", required: true },
-      { question: "Why do you want to join?", required: true },
+      { question: "Dece vrei acest grad?", required: true },
+      { question: "Ce vei face cu el?", required: true },
+      { question: "Why do you want to join?", required: false },
     ],
 
     // Embed colors by application status.
     statusColors: {
-      pending: "#FFA500",
+      pending: "#FFFF00",
       approved: "#00FF00",
-      denied: "#FF0000",
+      denied: "#DC143C",
     },
 
     // How long users must wait before submitting another application (hours).
@@ -75,10 +75,10 @@ export const botConfig = {
     deleteDeniedAfter: 7, 
 
     // Auto-delete approved applications after this many days.
-    deleteApprovedAfter: 30, 
+    deleteApprovedAfter: 14, 
 
     // Role IDs allowed to manage applications.
-    managerRoles: [], // Will be populated from environment or database
+    managerRoles: [1453752406033698816], // Will be populated from environment or database
   },
 
   // =========================
@@ -89,13 +89,13 @@ export const botConfig = {
     colors: {
       // Main brand colors.
       primary: "#FFA500", 
-      secondary: "#2F3136", 
+      secondary: "FFFF00", 
 
       // Standard status colors for success/error/warning/info messages.
-      success: "#57F287", 
-      error: "#ED4245", 
-      warning: "#FEE75C", 
-      info: "#3498DB", 
+      success: "#00FF00", 
+      error: "#DC143C", 
+      warning: "#FFA500", 
+      info: "#003366", 
 
       // Neutral utility colors.
       light: "#FFFFFF",
@@ -112,33 +112,33 @@ export const botConfig = {
 
       // Feature-specific colors.
       giveaway: {
-        active: "#57F287",
-        ended: "#ED4245",
+        active: "#90EE90",
+        ended: "#8B0000",
       },
       ticket: {
-        open: "#57F287",
-        claimed: "#FAA61A",
-        closed: "#ED4245",
-        pending: "#99AAB5",
+        open: "#008000",
+        claimed: "#800080",
+        closed: "#FF7F7F",
+        pending: "#b58f5e",
       },
-      economy: "#F1C40F",
-      birthday: "#E91E63",
-      moderation: "#9B59B6",
+      economy: "#28bf60",
+      birthday: "#971bd1",
+      moderation: "#1a1f73",
 
       // Ticket priority color mapping.
       priority: {
-        none: "#95A5A6",
-        low: "#3498db",
-        medium: "#2ecc71",
-        high: "#f1c40f",
-        urgent: "#e74c3c",
+        none: "#373738",
+        low: "#2b422d",
+        medium: "#805d26",
+        high: "#5e2d17",
+        urgent: "#ff0000",
       },
     },
     footer: {
       // Default footer text used in bot embeds.
-      text: "Titan Bot",
+      text: "fl0rea's colection",
       // Footer icon URL (null = no icon).
-      icon: null,
+      icon: true,
     },
     // Default thumbnail URL for embeds (null = no thumbnail).
     thumbnail: null,
@@ -156,21 +156,21 @@ export const botConfig = {
   economy: {
     currency: {
       // Currency display name.
-      name: "coins",
+      name: "token",
       // Plural display name.
-      namePlural: "coins",
+      namePlural: "tokens",
       // Currency symbol shown in balances.
-      symbol: "$",
+      symbol: "🪙",
     },
 
     // Starting balance for new users.
-    startingBalance: 0,
+    startingBalance: 1000,
 
     // Maximum bank amount before upgrades (if upgrades are used).
-    baseBankCapacity: 100000,
+    baseBankCapacity: 1000000000,
 
     // Daily reward amount.
-    dailyAmount: 100,
+    dailyAmount: 250,
 
     // Work command random payout range.
     workMin: 10,
@@ -185,7 +185,7 @@ export const botConfig = {
 
     // Jail time after failed rob (milliseconds).
     // 3600000 = 1 hour.
-    robFailJailTime: 3600000, 
+    robFailJailTime: 180000, 
   },
 
   // =========================
@@ -204,33 +204,33 @@ export const botConfig = {
     defaultCategory: null,
 
     // Role IDs allowed to manage/support tickets.
-    supportRoles: [],
+    supportRoles: [1453094613316403333,1511340324230795294,1454464144433745953,1453752406033698816],
 
     // Priority options users/staff can assign.
     priorities: {
       none: {
-        emoji: "⚪",
-        color: "#95A5A6",
+        emoji: "⚫",
+        color: "#373738",
         label: "None",
       },
       low: {
         emoji: "🟢",
-        color: "#2ECC71",
+        color: "#2b422d",
         label: "Low",
       },
       medium: {
         emoji: "🟡",
-        color: "#F1C40F",
+        color: "#805d26",
         label: "Medium",
       },
       high: {
         emoji: "🔴",
-        color: "#E74C3C",
+        color: "#5e2d17",
         label: "High",
       },
       urgent: {
         emoji: "🚨",
-        color: "#E91E63",
+        color: "#ff0000",
         label: "Urgent",
       },
     },
@@ -251,7 +251,7 @@ export const botConfig = {
   giveaways: {
     // Default giveaway duration in milliseconds.
     // 86400000 = 24 hours.
-    defaultDuration: 86400000, 
+    defaultDuration: 172800000, 
 
     // Allowed winner count range.
     minimumWinners: 1,
@@ -264,10 +264,10 @@ export const botConfig = {
     maximumDuration: 2592000000, 
 
     // Role IDs allowed to host giveaways.
-    allowedRoles: [],
+    allowedRoles: [1453094613316403333,1511340324230795294,1454464144433745953,1453752406033698816],
 
     // Role IDs that bypass giveaway restrictions.
-    bypassRoles: [],
+    bypassRoles: [1453096154915934358],
   },
 
   // =========================
@@ -275,13 +275,13 @@ export const botConfig = {
   // =========================
   birthday: {
     // Role ID given to users on their birthday.
-    defaultRole: null,
+    defaultRole: true,
 
     // Channel ID where birthday announcements are posted.
     announcementChannel: null,
 
     // Timezone used to calculate birthday dates.
-    timezone: "UTC",
+    timezone: "EEST",
   },
 
   // =========================
@@ -289,7 +289,7 @@ export const botConfig = {
   // =========================
   verification: {
     // Message shown when posting the verification panel.
-    defaultMessage: "Click the button below to verify yourself and gain access to the server!",
+    defaultMessage: "Da click pe acest buton pentru a te autentifica!",
 
     // Text on the verification button.
     defaultButtonText: "Verify",
@@ -303,11 +303,11 @@ export const botConfig = {
       defaultCriteria: "none",
 
       // Days used when `defaultCriteria` is `account_age`.
-      defaultAccountAgeDays: 7,
+      defaultAccountAgeDays: 0,
 
       // Member count threshold used when `defaultCriteria` is `server_size`.
       // Example: 1000 means auto-verify if server has fewer than 1000 members.
-      serverSizeThreshold: 1000,
+      serverSizeThreshold: 1,
 
       // Allowed safety limits for account-age requirements.
       // 1 = minimum day, 365 = maximum days.
@@ -330,7 +330,7 @@ export const botConfig = {
     verificationCooldown: 5000,  
 
     // Maximum failed attempts allowed inside the time window below.
-    maxVerificationAttempts: 3,   
+    maxVerificationAttempts: 5,   
 
     // Time window for counting attempts (milliseconds).
     // 60000 = 1 minute.
@@ -359,15 +359,15 @@ export const botConfig = {
     // Welcome template posted when a user joins.
     // Placeholders: {user}, {server}, {memberCount}
     defaultWelcomeMessage:
-      "Welcome {user} to {server}! We now have {memberCount} members!",
+      "Salut {user}! Sper ca te vei distra pe {server}!",
     // Goodbye template posted when a user leaves.
     // Placeholders: {user}, {memberCount}
     defaultGoodbyeMessage:
-      "{user} has left the server. We now have {memberCount} members.",
+      "{user} din pacate a plecat:( .",
     // Channel ID for welcome messages.
-    defaultWelcomeChannel: null,
+    defaultWelcomeChannel: 1514997466993528912,
     // Channel ID for goodbye messages.
-    defaultGoodbyeChannel: null,
+    defaultGoodbyeChannel: 1514997466993528912,
   },
 
   // =========================
@@ -381,7 +381,7 @@ export const botConfig = {
       // Channel type used for counters (typically "voice").
       type: "voice",
       // Channel name format. `{count}` is replaced automatically.
-      channelName: "{name}-{count}",
+      channelName: "",
     },
     permissions: {
       // Default denied permissions for the counter channel.
@@ -421,13 +421,13 @@ export const botConfig = {
   // GENERIC BOT MESSAGES
   // =========================
   messages: {
-    noPermission: "You do not have permission to use this command.",
-    cooldownActive: "Please wait {time} before using this command again.",
-    errorOccurred: "An error occurred while executing this command.",
+    noPermission: "Nu mai incerca ca nu ai voie!",
+    cooldownActive: "Mai asteapta {time} si dupa poti incerca.",
+    errorOccurred: "A aparut o eroare in timpul executarii comenzii",
     missingPermissions:
-      "I am missing required permissions to perform this action.",
-    commandDisabled: "This command has been disabled.",
-    maintenanceMode: "The bot is currently in maintenance mode.",
+      "Scuze dar nu am acces pentru asta.",
+    commandDisabled: "Aceasta comanda este dezactivata.",
+    maintenanceMode: "Bot-ul este in mentenanta,va rugam asteptati.",
   },
 
   // =========================
