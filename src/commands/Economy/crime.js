@@ -5,7 +5,7 @@ import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHan
 import { MessageTemplates } from '../../utils/messageTemplates.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 
-const CRIME_COOLDOWN = 60 * 60 * 1000;
+const CRIME_COOLDOWN = 60 * 120 * 1000;
 const MIN_CRIME_AMOUNT = 100;
 const MAX_CRIME_AMOUNT = 2000;
 const FAILURE_RATE = 0.4;
