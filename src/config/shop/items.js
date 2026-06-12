@@ -7,7 +7,7 @@ export const shopItems = [
     {
         id: 'extra_work',
         name: 'Extra Work Shift',
-        price: 5000 tockens,
+        price: 5000,
         description: 'Allows 1 extra use of the `/work` command.',
         type: 'consumable',
         maxQuantity: 5,
