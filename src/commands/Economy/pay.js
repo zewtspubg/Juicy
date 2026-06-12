@@ -10,17 +10,17 @@ import EconomyService from '../../services/economyService.js';
 export default {
     data: new SlashCommandBuilder()
         .setName('pay')
-        .setDescription('Pay another user some of your cash')
+        .setDescription('Plateste alt membru.')
         .addUserOption(option =>
             option
                 .setName('user')
-                .setDescription('User to pay')
+                .setDescription('Cui vrei sa ii dai bani.')
                 .setRequired(true)
         )
         .addIntegerOption(option =>
             option
                 .setName('amount')
-                .setDescription('Amount to pay')
+                .setDescription('Cat vrei sa ii dai.')
                 .setRequired(true)
                 .setMinValue(1)
         ),
@@ -43,18 +43,18 @@ export default {
 
             if (receiver.bot) {
                 throw createError(
-                    "Cannot pay bot",
+                    "Nu poti plati botii.",
                     ErrorTypes.VALIDATION,
-                    "You cannot pay a bot.",
+                    "Nu poti sa platesti un bot.",
                     { receiverId: receiver.id, isBot: true }
                 );
             }
             
             if (receiver.id === senderId) {
                 throw createError(
-                    "Cannot pay self",
+                    "Nu poti sa te platesti singur.",
                     ErrorTypes.VALIDATION,
-                    "You cannot pay yourself.",
+                    "Nu ai cum sa iti dai bani singur.",
                     { senderId, receiverId: receiver.id }
                 );
             }
@@ -63,7 +63,7 @@ export default {
                 throw createError(
                     "Invalid payment amount",
                     ErrorTypes.VALIDATION,
-                    "Amount must be greater than zero.",
+                    "Ai nevoie ca balanta ta sa fie de peste 0 tokens",
                     { amount, senderId }
                 );
             }
@@ -139,9 +139,9 @@ export default {
             try {
                 const receiverEmbed = createEmbed({ 
                     title: "💰 Incoming Payment!", 
-                    description: `${interaction.user.username} paid you **$${amount.toLocaleString()}**.` 
+                    description: `${interaction.user.username} ti-a dat **$${amount.toLocaleString()}**!` 
                 }).addFields({
-                    name: "Your New Cash",
+                    name: "Acum ai:",
                     value: `$${updatedReceiverData.wallet.toLocaleString()}`,
                     inline: true,
                 });
