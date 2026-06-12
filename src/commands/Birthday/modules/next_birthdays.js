@@ -43,16 +43,16 @@ export default {
 
                 let timeUntil = '';
                 if (birthday.daysUntil === 0) {
-                    timeUntil = '🎉 **Today!**';
+                    timeUntil = '🎉 **Azi!**';
                 } else if (birthday.daysUntil === 1) {
-                    timeUntil = '📅 **Tomorrow!**';
+                    timeUntil = '📅 **Maine!**';
                 } else {
                     timeUntil = `In ${birthday.daysUntil} day${birthday.daysUntil > 1 ? 's' : ''}`;
                 }
 
                 embed.addFields({
                     name: `${displayIndex}. ${member.displayName}`,
-                    value: `<@${birthday.userId}>\n📅 **Date:** ${birthday.monthName} ${birthday.day}\n⏰ **Time:** ${timeUntil}`,
+                    value: `<@${birthday.userId}>\n📅 **Data:** ${birthday.monthName} ${birthday.day}\n⏰ **Timp:** ${timeUntil}`,
                     inline: false
                 });
             }
