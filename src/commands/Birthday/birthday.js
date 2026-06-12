@@ -55,7 +55,7 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
-                .setDescription('Remove your birthday')
+                .setDescription('Iti stergi ziua de nastere.')
         )
         .addSubcommand(subcommand =>
             subcommand
