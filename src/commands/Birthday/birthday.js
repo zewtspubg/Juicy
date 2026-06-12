@@ -60,7 +60,7 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('next')
-                .setDescription('Show upcoming birthdays')
+                .setDescription('Arata zilele de nastere care vor veni')
         )
         .addSubcommand(subcommand =>
             subcommand
