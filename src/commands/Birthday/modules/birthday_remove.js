@@ -19,15 +19,15 @@ export default {
             if (result.success) {
                 await InteractionHelper.safeEditReply(interaction, {
                     embeds: [successEmbed(
-                        "Your birthday has been successfully removed from the server.",
-                        "Birthday Removed 🗑️"
+                        "Ti ai sters ziua de nastere cu succes!",
+                        "Zi de nastere stearsa."
                     )]
                 });
             } else if (result.notFound) {
                 await InteractionHelper.safeEditReply(interaction, {
                     embeds: [createEmbed({
-                        title: '❌ No Birthday Found',
-                        description: "You don't have a birthday set to remove.",
+                        title: '❌ Nu a fost gasita nici o zi de nastere.',
+                        description: "Nu ai o zi de nastere setata.",
                         color: 'error'
                     })]
                 });
