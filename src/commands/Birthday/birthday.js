@@ -50,7 +50,7 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription('List all birthdays in the server')
+                .setDescription('Vezi lista de sarbatoriti')
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -65,11 +65,11 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('setchannel')
-                .setDescription('Set or disable the channel for birthday announcements. (Manage Server required)')
+                .setDescription('Seteaza sau dezactiveaza canalul. (Manage Server required)')
                 .addChannelOption(option =>
                     option
                         .setName('channel')
-                        .setDescription('The text channel for announcements. Leave empty to disable.')
+                        .setDescription('Canalul pentru anunturi. Lasa spatiu gol pentru dezactivare.')
                         .addChannelTypes(ChannelType.GuildText)
                         .setRequired(false)
                 )
