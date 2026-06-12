@@ -13,7 +13,7 @@ const FINE_PERCENTAGE = 0.1;
 export default {
     data: new SlashCommandBuilder()
         .setName('rob')
-        .setDescription('Attempt to rob another user (very risky)')
+        .setDescription('Poti sa incerci sa jefuiesti un membru!(risti sa fii prins!)')
         .addUserOption(option =>
             option
                 .setName('user')
@@ -32,18 +32,18 @@ export default {
 
             if (robberId === victimUser.id) {
                 throw createError(
-                    "Cannot rob self",
+                    "Nu poti sa te jefuiesti singur!",
                     ErrorTypes.VALIDATION,
-                    "You cannot rob yourself.",
+                    "Dece ai vrea sa te jefuiesti singur?",
                     { robberId, victimId: victimUser.id }
                 );
             }
             
             if (victimUser.bot) {
                 throw createError(
-                    "Cannot rob bot",
+                    "Nu poti sa jefuiesti bot-ul!",
                     ErrorTypes.VALIDATION,
-                    "You cannot rob a bot.",
+                    "Dece vrei sa jefuiesti bot-ul?",
                     { victimId: victimUser.id, isBot: true }
                 );
             }
@@ -70,16 +70,16 @@ export default {
                 throw createError(
                     "Robbery cooldown active",
                     ErrorTypes.RATE_LIMIT,
-                    `You need to lay low. Wait **${hours}h ${minutes}m** before attempting another robbery.`,
+                    `Esti obosit, asteapta **${hours}h ${minutes}m** pentru a reincerca dinou.`,
                     { remaining, hours, minutes, cooldownType: 'rob' }
                 );
             }
 
             if (victimData.wallet < 500) {
                 throw createError(
-                    "Victim too poor",
+                    "Victima e prea saraca.",
                     ErrorTypes.VALIDATION,
-                    `${victimUser.username} is too poor. They need at least $500 cash to be worth robbing.`,
+                    `${victimUser.username} e prea sarac. Are nevoie de minim 500 pentru ai jefui.`,
                     { victimWallet: victimData.wallet, required: 500 }
                 );
             }
@@ -111,7 +111,7 @@ export default {
 
                 resultEmbed = MessageTemplates.SUCCESS.DATA_UPDATED(
                     "robbery",
-                    `You successfully stole **$${amountStolen.toLocaleString()}** from ${victimUser.username}!`
+                    `Ai furat cu succes **$${amountStolen.toLocaleString()}** de la ${victimUser.username}!`
                 );
             } else {
                 const fineAmount = Math.floor((robberData.wallet || 0) * FINE_PERCENTAGE);
@@ -123,8 +123,8 @@ export default {
                 }
 
                 resultEmbed = MessageTemplates.ERRORS.INSUFFICIENT_PERMISSIONS(
-                    "robbery failed",
-                    `You failed the robbery and were caught! You were fined **$${fineAmount.toLocaleString()}** of your own cash.`
+                    "Ai esuat jaful",
+                    `Ai fost prins in mijlocul jafului!Trebuie sa platesti **$${fineAmount.toLocaleString()}** din proprii tai bani.`
                 );
             }
 
@@ -146,7 +146,7 @@ export default {
                         inline: true,
                     },
                 )
-                .setFooter({ text: `Next robbery available in 4 hours.` });
+                .setFooter({ text: `Urmatorul jaf il poti da in 4 ore.` });
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [resultEmbed] });
     }, { command: 'rob' })
