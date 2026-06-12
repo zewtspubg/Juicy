@@ -14,23 +14,23 @@ import { InteractionHelper } from '../../utils/interactionHelper.js';
 export default {
     data: new SlashCommandBuilder()
         .setName('birthday')
-        .setDescription('Birthday system commands')
+        .setDescription('Systemul de comenzi birthday')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('set')
-                .setDescription('Set your birthday')
+                .setDescription('seteaza-ti ziua de nastere!')
                 .addIntegerOption(option =>
                     option
-                        .setName('month')
-                        .setDescription('Birth month (1-12)')
+                        .setName('Luna')
+                        .setDescription('Luna nasterii (1-12)')
                         .setRequired(true)
                         .setMinValue(1)
                         .setMaxValue(12)
                 )
                 .addIntegerOption(option =>
                     option
-                        .setName('day')
-                        .setDescription('Birth day (1-31)')
+                        .setName('Ziua')
+                        .setDescription('Ziua nasterii(1-31)')
                         .setRequired(true)
                         .setMinValue(1)
                         .setMaxValue(31)
