@@ -19,15 +19,15 @@ export default {
             if (sortedBirthdays.length === 0) {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [createEmbed({
-                        title: '❌ No Birthdays',
-                        description: 'No birthdays have been set in this server yet.',
+                        title: '❌ nu sunt zile de nastere pe server',
+                        description: 'Nu exista zile de nastere setate pe server.',
                         color: 'error'
                     })]
                 });
             }
 
             const embed = createEmbed({
-                title: "🎂 Server Birthdays",
+                title: "🎂 Sarbatoritii Serverului",
                 color: 'info'
             });
 
@@ -58,8 +58,8 @@ export default {
             if (displayIndex === 0) {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [createEmbed({
-                        title: '❌ No Birthdays',
-                        description: 'No birthdays have been set by current server members.',
+                        title: '❌ Nu sunt zile de nastere',
+                        description: 'Deocamdata nu exista zile de nastere pe server.',
                         color: 'error'
                     })]
                 });
@@ -72,7 +72,7 @@ export default {
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
             
-            logger.info('Birthday list retrieved successfully', {
+            logger.info('Lista a fost facuta cu succes!', {
                 userId: interaction.user.id,
                 guildId,
                 birthdayCount: displayIndex,
