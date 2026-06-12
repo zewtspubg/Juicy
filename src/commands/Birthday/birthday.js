@@ -14,7 +14,7 @@ import { InteractionHelper } from '../../utils/interactionHelper.js';
 export default {
     data: new SlashCommandBuilder()
         .setName('birthday')
-        .setDescription('Systemul de comenzi birthday')
+        .setDescription('Birthday system commands')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('set')
