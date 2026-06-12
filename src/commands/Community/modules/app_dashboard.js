@@ -1,3 +1,4 @@
+
 import { getColor } from '../../../config/bot.js';
 import {
     ActionRowBuilder,
@@ -42,11 +43,11 @@ function buildDashboardEmbed(settings, roles, guild) {
     const managerRoleList =
         settings.managerRoles?.length > 0
             ? settings.managerRoles.map(id => `<@&${id}>`).join(', ')
-            : '`Nici o configurare`';
+            : '`None configured`';
     const roleList =
         roles.length > 0
             ? roles.map(r => `<@&${r.roleId}> — ${r.name}`).join('\n')
-            : '`Nu este configurat nici un rol`';
+            : '`No application roles configured`';
     const questionCount = settings.questions?.length ?? 0;
     const firstQ =
         settings.questions?.[0]
@@ -54,11 +55,11 @@ function buildDashboardEmbed(settings, roles, guild) {
             : '`Not set`';
 
     return new EmbedBuilder()
-        .setTitle('📋 Aplicatii dashboard')
-        .setDescription(`Schimba setarile aplicatiilor pentru **${guild.name}**.\nSelecteaza o optiune de mai jos pentru a modifica o setare.`)
+        .setTitle('📋 Applications Dashboard')
+        .setDescription(`Manage application settings for **${guild.name}**.\nSelect an option below to modify a setting.`)
         .setColor(getColor('info'))
         .addFields(
-            { name: '⚙️ Application Status', value: settings.enabled ? '✅ Activat' : '❌ Dezactivat', inline: true },
+            { name: '⚙️ Application Status', value: settings.enabled ? '✅ Enabled' : '❌ Disabled', inline: true },
             { name: '📢 Log Channel', value: logChannel, inline: true },
             { name: '\u200B', value: '\u200B', inline: true },
             { name: '🛡️ Manager Roles', value: managerRoleList, inline: false },
@@ -70,43 +71,43 @@ function buildDashboardEmbed(settings, roles, guild) {
                 inline: false,
             },
         )
-        .setFooter({ text: 'Dashboard-ul se va inchide automat dupa 15 minute de inactivitate' })
+        .setFooter({ text: 'Dashboard closes after 15 minutes of inactivity' })
         .setTimestamp();
 }
 
 function buildSelectMenu(guildId) {
     return new StringSelectMenuBuilder()
         .setCustomId(`app_cfg_${guildId}`)
-        .setPlaceholder('Selecteaza o setare pentru a o configura...')
+        .setPlaceholder('Select a setting to configure...')
         .addOptions(
             new StringSelectMenuOptionBuilder()
                 .setLabel('Log Channel')
-                .setDescription('Seteaza canalul in care vor aparea log-urile aplicatiilor')
+                .setDescription('Set the channel where new applications are logged')
                 .setValue('log_channel')
                 .setEmoji('📢'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Manager Roles')
-                .setDescription('Adauga sau elimina un rol care sa gestioneze aplicatiile')
+                .setDescription('Add or remove a role that can manage applications')
                 .setValue('manager_role')
                 .setEmoji('🛡️'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Edit Questions')
-                .setDescription('Personalizeaza-ti intrebarile pentru formuralul aplicatiei')
+                .setDescription('Customise the questions shown on the application form')
                 .setValue('questions')
                 .setEmoji('📝'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Add Application Role')
-                .setDescription('Adauga un rol care poate aplica')
+                .setDescription('Add a role that members can apply for')
                 .setValue('role_add')
                 .setEmoji('➕'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Remove Application Role')
-                .setDescription('Elimina un rol care poate aplica')
+                .setDescription('Remove a role from the applications list')
                 .setValue('role_remove')
                 .setEmoji('➖'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Retention Period')
-                .setDescription('Setati durata de pastrare a aplicatiilor în asteptare si a celor revizuite')
+                .setDescription('Set how long pending and reviewed applications are kept')
                 .setValue('retention')
                 .setEmoji('🗑️'),
         );
@@ -160,9 +161,9 @@ export default {
 
             if (isCompletelyUnconfigured) {
                 throw new TitanBotError(
-                    'Systemul aplicatiei nu este setat',
+                    'Applications system not set up',
                     ErrorTypes.CONFIGURATION,
-                    'Systemul aplicatiilor nu a fost inca setat. Te rugam sa folosesti comanda /app-admin setup pentru crearea unei aplicatii',
+                    'The applications system has not been configured yet. Please run `/app-admin setup` to create your first application.',
                 );
             }
 
@@ -190,9 +191,9 @@ export default {
             if (error instanceof TitanBotError) throw error;
             logger.error('Unexpected error in app_dashboard:', error);
             throw new TitanBotError(
-               `Aplicatia dashboard a esuat: ${error.message}`,
+                `Applications dashboard failed: ${error.message}`,
                 ErrorTypes.UNKNOWN,
-                'Esuat la deschiderea aplicatiilor din dashboard.',
+                'Failed to open the applications dashboard.',
             );
         }
     },
@@ -203,20 +204,20 @@ export default {
 async function showApplicationSelector(interaction, roles, settings, guildId, client) {
     const selectMenu = new StringSelectMenuBuilder()
         .setCustomId(`app_select_${guildId}`)
-        .setPlaceholder('Selecteaza o aplicatie pentru configuratie...')
+        .setPlaceholder('Select an application to configure...')
         .addOptions(
             roles.map(role =>
                 new StringSelectMenuOptionBuilder()
                     .setLabel(role.name)
-                    .setDescription(`Co ${role.name} application`)
+                    .setDescription(`Configure the ${role.name} application`)
                     .setValue(role.roleId)
                     .setEmoji('📋'),
             ),
         );
 
     const embed = new EmbedBuilder()
-        .setTitle('🎯 Selecteaza aplicatia')
-        .setDescription('Seteaza ce rol vrei sa configurezi.')
+        .setTitle('🎯 Select Application')
+        .setDescription('Choose which application role you want to configure.')
         .setColor(getColor('info'));
 
     await InteractionHelper.safeEditReply(interaction, {
@@ -247,7 +248,7 @@ async function showApplicationSelector(interaction, roles, settings, guildId, cl
     collector.on('end', (collected, reason) => {
         if (reason === 'time' && collected.size === 0) {
             InteractionHelper.safeEditReply(interaction, {
-                embeds: [errorEmbed('Fara timp', 'Nu a fost selectat nimic. Dashboard-ul se va inchide.')],
+                embeds: [errorEmbed('Timed Out', 'No selection was made. The dashboard has closed.')],
                 components: [],
             }).catch(() => {});
         }
@@ -295,43 +296,43 @@ async function showApplicationDashboard(rootInteraction, selectedRole, settings,
         : '`None configured`';
 
     const embed = new EmbedBuilder()
-        .setTitle('🎭 Aplicatii dashboard')
+        .setTitle('🎭 Application Dashboard')
         .setDescription(`Configuration for **${selectedRole.name}**`)
         .setColor(isEnabled ? getColor('success') : getColor('error'))
         .addFields(
             { 
-                name: '🎭 rol-uri', 
+                name: '🎭 Role', 
                 value: roleObj ? roleObj.toString() : `<@&${selectedRole.roleId}>`, 
                 inline: true 
             },
             { 
-                name: '⚙️ Statusul aplicatiei', 
-                value: isEnabled ? '✅ **Activat**' : '❌ **Dezactivat**', 
+                name: '⚙️ Application Status', 
+                value: isEnabled ? '✅ **Enabled**' : '❌ **Disabled**', 
                 inline: true 
             },
             { name: '\u200B', value: '\u200B', inline: true },
             { 
-                name: '📝 intrebari', 
+                name: '📝 Questions', 
                 value: questionsDisplay,
                 inline: false 
             },
             { 
-                name: '📢 canal de log-uri', 
+                name: '📢 Log Channel', 
                 value: logChannelDisplay,
                 inline: true 
             },
             { 
-                name: '🛡️ gestioneaza rolurile',
+                name: '🛡️ Manager Roles',
                 value: managerRolesDisplay,
                 inline: true 
             },
             { 
-                name: '🗑️ Perioada de pastrare',
+                name: '🗑️ Retention Period',
                 value: `Pending: **${settings.pendingApplicationRetentionDays ?? 30}d** · Reviewed: **${settings.reviewedApplicationRetentionDays ?? 14}d**`,
                 inline: false 
             },
         )
-        .setFooter({ text: 'Dashboard-ul se va inchide dupa 10 minute de inactivitate' })
+        .setFooter({ text: 'Dashboard closes after 10 minutes of inactivity' })
         .setTimestamp();
 
     // Create dropdown button with customization options
@@ -345,7 +346,7 @@ async function showApplicationDashboard(rootInteraction, selectedRole, settings,
             .setStyle(isEnabled ? ButtonStyle.Danger : ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId(`app_delete_${selectedRole.roleId}`)
-            .setLabel('Sterge aplicatia')
+            .setLabel('Delete Application')
             .setStyle(ButtonStyle.Danger)
             .setEmoji('🗑️'),
     );
@@ -404,15 +405,15 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
             }
         } catch (error) {
             if (error instanceof TitanBotError) {
-                logger.debug(`Eroare de validare a configuratiei aplicatiilor : ${error.message}`);
+                logger.debug(`Applications config validation error: ${error.message}`);
             } else {
-                logger.error('O eroare neasteptata de la dashboard:', error);
+                logger.error('Unexpected applications dashboard error:', error);
             }
 
             const errorMessage =
                 error instanceof TitanBotError
-                    ? error.userMessage || 'A aparut o eroare la procesarea selectiei tale.'
-                    : 'A aparut o eroare neasteptata la actualizarea configuratiei.';
+                    ? error.userMessage || 'An error occurred while processing your selection.'
+                    : 'An unexpected error occurred while updating the configuration.';
 
             if (!selectInteraction.replied && !selectInteraction.deferred) {
                 await safeDeferInteraction(selectInteraction);
@@ -431,7 +432,7 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
         if (reason === 'time') {
             const timeoutEmbed = new EmbedBuilder()
                 .setTitle('\u23f0 Dashboard Timed Out')
-                .setDescription('Acest dashboard a fost inchis din cauza neactivitatii. Te rugam sa rulezi comanda din nou pentru a continua.')
+                .setDescription('This dashboard has been closed due to inactivity. Please run the command again to continue.')
                 .setColor(getColor('error'));
                 
             await InteractionHelper.safeEditReply(interaction, {
@@ -469,11 +470,11 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
 
                 await toggleInteraction.followUp({
                     embeds: [successEmbed(
-                        wasEnabled ? '🔴 Aplicatie Dezactivata' : '🟢 Aplicatie Activata',
-                        `systemul de aplicatii este acum **${wasEnabled ? 'dezactivat' : 'activat'}**.\n\n${
+                        wasEnabled ? '🔴 Applications Disabled' : '🟢 Applications Enabled',
+                        `The applications system is now **${wasEnabled ? 'disabled' : 'enabled'}**.\n\n${
                             wasEnabled 
-                                ? 'Membrii nu pot mai pot aplica pentru roluri.' 
-                                : 'Membrii pot sa inceapa sa aplice pentru roluri.'
+                                ? 'Members will no longer be able to apply for roles.' 
+                                : 'Members can now start applying for roles.'
                         }`,
                     )],
                     flags: MessageFlags.Ephemeral,
@@ -482,7 +483,7 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
             } catch (error) {
                 logger.error('Error toggling global application status:', error);
                 await toggleInteraction.followUp({
-                    embeds: [errorEmbed('Error', 'A aparut o eroare la comutarea starii aplicatiei.')],
+                    embeds: [errorEmbed('Error', 'An error occurred while toggling the application status.')],
                     flags: MessageFlags.Ephemeral,
                 });
             }
@@ -491,8 +492,8 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
         globalToggleCollector.on('end', async (collected, reason) => {
             if (reason === 'time') {
                 const timeoutEmbed = new EmbedBuilder()
-                    .setTitle('⏱️ Timeout de configurare')
-                    .setDescription('Acest dashboard va fi inchis din cauza neactivitatii (10 minutes).\n\nPentru a continua va rugam sa rulati comanda din nou.')
+                    .setTitle('⏱️ Configuration Timeout')
+                    .setDescription('This dashboard session has timed out due to inactivity (10 minutes).\n\nTo continue configuring your applications, please run the command again.')
                     .setColor(getColor('warning'));
                     
                 await InteractionHelper.safeEditReply(interaction, {
@@ -516,18 +517,18 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
         btnCollector.on('collect', async btnInteraction => {
             // Show confirmation modal
             const appRoleForDelete = roles.find(r => r.roleId === selectedRoleId);
-            const appNameForDelete = appRoleForDelete?.name ?? 'Aceasta aplicatie';
+            const appNameForDelete = appRoleForDelete?.name ?? 'this application';
 
             const confirmModal = new ModalBuilder()
                 .setCustomId('app_delete_confirm')
-                .setTitle('Confirma stergerea aplicatiei');
+                .setTitle('Confirm Application Deletion');
 
             const deleteWarningText = new TextDisplayBuilder()
-                .setContent(`⚠️ Esti pe cale sa stergi permanent **${appNameForDelete}**. Toate aplicațiile și setările stocate pentru acest rol vor fi eliminate și nu pot fi recuperate.`);
+                .setContent(`⚠️ You are about to permanently delete **${appNameForDelete}**. All stored applications and settings for this role will be removed and cannot be recovered.`);
 
             const deleteCheckbox = new CheckboxBuilder()
                 .setCustomId('confirm_delete')
-                .setDefault(true);
+                .setDefault(false);
 
             const deleteCheckboxLabel = new LabelBuilder()
                 .setLabel('I confirm — this cannot be undone')
@@ -542,7 +543,7 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
             } catch (error) {
                 logger.error('Error showing delete confirmation modal:', error);
                 await btnInteraction.followUp({
-                    embeds: [errorEmbed('Error', 'Nu s-a putut afisa fereastra de confirmare. Va rugam sa incercati din nou.')],
+                    embeds: [errorEmbed('Error', 'Failed to show confirmation modal. Please try again.')],
                     flags: MessageFlags.Ephemeral,
                 }).catch(() => {});
                 return;
@@ -557,7 +558,7 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
 
                 if (!confirmSubmit) {
                     await btnInteraction.followUp({
-                        embeds: [errorEmbed('Cancelled', 'Stergerea aplicatiei a fost anulata.')],
+                        embeds: [errorEmbed('Cancelled', 'Application deletion was cancelled.')],
                         flags: MessageFlags.Ephemeral,
                     });
                     return;
@@ -566,7 +567,7 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
                 const confirmed = confirmSubmit.fields.getCheckbox('confirm_delete');
                 if (!confirmed) {
                     await confirmSubmit.reply({
-                        embeds: [errorEmbed('Not Confirmed', 'Trebuie sa bifati caseta de selectare pentru confirmare pentru a sterge aplicatia.')],
+                        embeds: [errorEmbed('Not Confirmed', 'You must tick the confirmation checkbox to delete the application.')],
                         flags: MessageFlags.Ephemeral,
                     });
                     return;
@@ -578,9 +579,9 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
                 btnCollector.stop();
 
             } catch (error) {
-                logger.error('Eroare la confirmarea stergerii aplicatiei:', error);
+                logger.error('Error confirming application deletion:', error);
                 await btnInteraction.followUp({
-                    embeds: [errorEmbed('Error', 'A aparut o eroare la stergerea aplicatiei.')],
+                    embeds: [errorEmbed('Error', 'An error occurred while deleting the application.')],
                     flags: MessageFlags.Ephemeral,
                 });
             }
@@ -589,8 +590,8 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
         btnCollector.on('end', async (collected, reason) => {
             if (reason === 'time') {
                 const timeoutEmbed = new EmbedBuilder()
-                    .setTitle('⏱️ Timeout de configurare')
-                    .setDescription('Aceasta sesiune a tabloului de bord a expirat din cauza inactivitatii. (10 minutes).\n\nPentru a continua configurarea aplicatiilor, va rugam sa executati din nou comanda.')
+                    .setTitle('⏱️ Configuration Timeout')
+                    .setDescription('This dashboard session has timed out due to inactivity (10 minutes).\n\nTo continue configuring your applications, please run the command again.')
                     .setColor(getColor('warning'));
                     
                 await InteractionHelper.safeEditReply(interaction, {
@@ -618,7 +619,7 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
                 const roleIndex = roles.findIndex(r => r.roleId === selectedRoleId);
                 if (roleIndex === -1) {
                     await toggleInteraction.followUp({
-                        embeds: [errorEmbed('Not Found', 'rolul aplicatiei nu a fost gasit.')],
+                        embeds: [errorEmbed('Not Found', 'Application role not found.')],
                         flags: MessageFlags.Ephemeral,
                     });
                     return;
@@ -637,20 +638,20 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
 
                 await toggleInteraction.followUp({
                     embeds: [successEmbed(
-                        wasEnabled ? '🔴 aplicatie dezactivata' : '🟢 aplicatie activata',
+                        wasEnabled ? '🔴 Application Disabled' : '🟢 Application Enabled',
                         `The **${updatedRole.name}** application is now **${wasEnabled ? 'disabled' : 'enabled'}**.\n\n${
                             wasEnabled 
-                                ? 'Aceasta aplicatie nu va mai aparea în optiunile /apply submit.' 
-                                : 'Aceasta aplicatie va aparea acum în optiunile /apply submit.'
+                                ? 'This application will no longer appear in `/apply submit` options.' 
+                                : 'This application will now appear in `/apply submit` options.'
                         }`,
                     )],
                     flags: MessageFlags.Ephemeral,
                 });
 
             } catch (error) {
-                logger.error('Eroare la comutarea starii aplicatiei:', error);
+                logger.error('Error toggling application status:', error);
                 await toggleInteraction.followUp({
-                    embeds: [errorEmbed('Error', 'A aparut o eroare la comutarea starii aplicatiei.')],
+                    embeds: [errorEmbed('Error', 'An error occurred while toggling the application status.')],
                     flags: MessageFlags.Ephemeral,
                 });
             }
@@ -659,8 +660,8 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
         toggleCollector.on('end', async (collected, reason) => {
             if (reason === 'time') {
                 const timeoutEmbed = new EmbedBuilder()
-                    .setTitle('⏱️ Timeout de configurare')
-                    .setDescription('Acest dashboard va fi inchis din cauza neactivitatii (10 minutes).\n\nPentru a continua configurarea aplicatiilor, va rugam sa executati din nou comanda.')
+                    .setTitle('⏱️ Configuration Timeout')
+                    .setDescription('This dashboard session has timed out due to inactivity (10 minutes).\n\nTo continue configuring your applications, please run the command again.')
                     .setColor(getColor('warning'));
                     
                 await InteractionHelper.safeEditReply(interaction, {
@@ -677,26 +678,26 @@ function setupCollectors(interaction, settings, roles, guildId, client, selected
 function buildApplicationSelectMenu(guildId, roleId) {
     return new StringSelectMenuBuilder()
         .setCustomId(`app_cfg_${roleId}`)
-        .setPlaceholder('Seleacteaza un rol de configurare...')
+        .setPlaceholder('Select a setting to configure...')
         .addOptions(
             new StringSelectMenuOptionBuilder()
                 .setLabel('Log Channel')
-                .setDescription('Seteaza canalul in care vor aparea log-urile aplicatiilor')
+                .setDescription('Set the channel where applications are logged')
                 .setValue('log_channel')
                 .setEmoji('📢'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Manager Roles')
-                .setDescription('Adauga sau elimina un rol care sa gestioneze aplicatiile')
+                .setDescription('Add or remove a role that can manage applications')
                 .setValue('manager_role')
                 .setEmoji('🛡️'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Edit Questions')
-                .setDescription('Personalizeaza-ti intrebarile pentru formuralul aplicatiei')
+                .setDescription('Customise the questions shown on the application form')
                 .setValue('questions')
                 .setEmoji('📝'),
             new StringSelectMenuOptionBuilder()
                 .setLabel('Retention Period')
-                .setDescription('Setati durata de pastrare a aplicatiilor în asteptare si a celor revizuite')
+                .setDescription('Set how long pending and reviewed applications are kept')
                 .setValue('retention')
                 .setEmoji('🗑️'),
         );
@@ -717,7 +718,7 @@ async function handleLogChannel(selectInteraction, rootInteraction, settings, ro
 
     const channelSelect = new ChannelSelectMenuBuilder()
         .setCustomId('log_channel')
-        .setPlaceholder('Selecteaza un canal...')
+        .setPlaceholder('Select a text channel...')
         .setMinValues(1)
         .setMaxValues(1)
         .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
@@ -725,7 +726,7 @@ async function handleLogChannel(selectInteraction, rootInteraction, settings, ro
 
     const channelLabel = new LabelBuilder()
         .setLabel('Log Channel')
-        .setDescription('Canalul unde vor fi înregistrate noile aplicatii')
+        .setDescription('Channel where new applications will be logged')
         .setChannelSelectMenuComponent(channelSelect);
 
     modal.addLabelComponents(channelLabel);
@@ -751,7 +752,7 @@ async function handleLogChannel(selectInteraction, rootInteraction, settings, ro
         }
 
         await modalSubmission.reply({
-            embeds: [successEmbed('✅ canalul de log-uri a fost acutualizat', `log-urile aplicației vor fi acum trimise către ${channel ?? `<#${channelId}>`}.`)],
+            embeds: [successEmbed('✅ Log Channel Updated', `Application logs will now be sent to ${channel ?? `<#${channelId}>`}.`)],
             flags: MessageFlags.Ephemeral,
         });
 
@@ -760,7 +761,7 @@ async function handleLogChannel(selectInteraction, rootInteraction, settings, ro
         if (error.code === 'INTERACTION_TIMEOUT') return;
         logger.error('Error in log channel modal:', error);
         await selectInteraction.followUp({
-            embeds: [errorEmbed('A aparut o eroare la actualizarea canalului de log-uri.')],
+            embeds: [errorEmbed('An error occurred while updating the log channel.')],
             flags: MessageFlags.Ephemeral,
         });
     }
@@ -771,18 +772,18 @@ async function handleLogChannel(selectInteraction, rootInteraction, settings, ro
 async function handleManagerRole(selectInteraction, rootInteraction, settings, roles, guildId, client) {
     const modal = new ModalBuilder()
         .setCustomId(`app_cfg_manager_role_modal_${guildId}`)
-        .setTitle('🛡️ Manager pentru configurarea rolurilor');
+        .setTitle('🛡️ Configure Manager Roles');
 
     const roleSelect = new RoleSelectMenuBuilder()
         .setCustomId('manager_roles')
-        .setPlaceholder('Selecteaza rolurile la care are acces managerul...')
+        .setPlaceholder('Select roles to grant manager access...')
         .setMinValues(1)
         .setMaxValues(5)
         .setRequired(true);
 
     const roleLabel = new LabelBuilder()
         .setLabel('Manager Roles')
-        .setDescription('Rolurile selectate vor fi activate/dezactivate ca roluri de manager')
+        .setDescription('Selected roles will be toggled on/off as manager roles')
         .setRoleSelectMenuComponent(roleSelect);
 
     modal.addLabelComponents(roleLabel);
@@ -856,7 +857,7 @@ async function handleQuestions(selectInteraction, rootInteraction, settings, rol
             new ActionRowBuilder().addComponents(
                 new TextInputBuilder()
                     .setCustomId('q2')
-                    .setLabel('Question 2 (required)')
+                    .setLabel('Question 2 (optional)')
                     .setStyle(TextInputStyle.Short)
                     .setValue(currentQuestions[1] ?? '')
                     .setMaxLength(100)
@@ -909,7 +910,7 @@ async function handleQuestions(selectInteraction, rootInteraction, settings, rol
 
     if (newQuestions.length === 0) {
         await submitted.reply({
-            embeds: [errorEmbed('nici o intrevare', 'Este nevoie de cel putin o intrebare.')],
+            embeds: [errorEmbed('No Questions', 'At least one question is required.')],
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -929,7 +930,7 @@ async function handleQuestions(selectInteraction, rootInteraction, settings, rol
     await submitted.reply({
         embeds: [
             successEmbed(
-                '✅ Intrebarile au fost actualizate',
+                '✅ Questions Updated',
                 `${newQuestions.length} question${newQuestions.length !== 1 ? 's' : ''} saved.`,
             ),
         ],
@@ -944,18 +945,18 @@ async function handleQuestions(selectInteraction, rootInteraction, settings, rol
 async function handleRoleAdd(selectInteraction, rootInteraction, settings, roles, guildId, client) {
     const modal = new ModalBuilder()
         .setCustomId(`app_cfg_role_add_modal_${guildId}`)
-        .setTitle('➕ Adauga rol de aplicare');
+        .setTitle('➕ Add Application Role');
 
-    const roleSelect = new RoleSelectMenuBuilder()a
+    const roleSelect = new RoleSelectMenuBuilder()
         .setCustomId('application_role')
-        .setPlaceholder('Selecteaza rolurile care pot aplica...')
+        .setPlaceholder('Select the role members can apply for...')
         .setMinValues(1)
         .setMaxValues(1)
         .setRequired(true);
 
     const roleLabel = new LabelBuilder()
-        .setLabel('Aplicarea rolului')
-        .setDescription('Selecteaza rolul care vrei sa aplici')
+        .setLabel('Application Role')
+        .setDescription('Select the Discord role members will be applying for')
         .setRoleSelectMenuComponent(roleSelect);
 
     const nameInput = new TextInputBuilder()
@@ -982,7 +983,7 @@ async function handleRoleAdd(selectInteraction, rootInteraction, settings, roles
 
         if (roles.some(r => r.roleId === roleId)) {
             await modalSubmission.reply({
-                embeds: [errorEmbed('Deja adaugat', `${role ?? roleId} este deja un rol pentru aplicatie.`)],
+                embeds: [errorEmbed('Already Added', `${role ?? roleId} is already an application role.`)],
                 flags: MessageFlags.Ephemeral,
             });
             return;
@@ -992,7 +993,7 @@ async function handleRoleAdd(selectInteraction, rootInteraction, settings, roles
         await saveApplicationRoles(client, guildId, roles);
 
         await modalSubmission.reply({
-            embeds: [successEmbed('✅ rol adaugat', `${role ?? roleId} a fost adaugat ca **${customName}**.`)],
+            embeds: [successEmbed('✅ Role Added', `${role ?? roleId} added as **${customName}**.`)],
             flags: MessageFlags.Ephemeral,
         });
 
@@ -1001,7 +1002,7 @@ async function handleRoleAdd(selectInteraction, rootInteraction, settings, roles
         if (error.code === 'INTERACTION_TIMEOUT') return;
         logger.error('Error in role add modal:', error);
         await selectInteraction.followUp({
-            embeds: [errorEmbed('A aparut o eroare in timpul adaugarii rolului.')],
+            embeds: [errorEmbed('An error occurred while adding the application role.')],
             flags: MessageFlags.Ephemeral,
         });
     }
@@ -1012,7 +1013,7 @@ async function handleRoleAdd(selectInteraction, rootInteraction, settings, roles
 async function handleRoleRemove(selectInteraction, rootInteraction, settings, roles, guildId, client) {
     if (roles.length === 0) {
         await selectInteraction.followUp({
-            embeds: [errorEmbed('nici un rol', 'Nu exista roluri în aplicatie configurate pentru eliminare.')],
+            embeds: [errorEmbed('No Roles', 'There are no application roles configured to remove.')],
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -1020,18 +1021,18 @@ async function handleRoleRemove(selectInteraction, rootInteraction, settings, ro
 
     const modal = new ModalBuilder()
         .setCustomId(`app_cfg_role_remove_modal_${guildId}`)
-        .setTitle('➖ Elimina rolul aplicatiei');
+        .setTitle('➖ Remove Application Role');
 
     const roleSelect = new RoleSelectMenuBuilder()
         .setCustomId('remove_role')
-        .setPlaceholder('Selecteaza rolul pe care vrei sa il elimini...')
+        .setPlaceholder('Select the role to remove...')
         .setMinValues(1)
         .setMaxValues(1)
         .setRequired(true);
 
     const roleLabel = new LabelBuilder()
-        .setLabel('elimina rolul aplicatiei')
-        .setDescription('selecteaza rolul de eliminat din lista de aplicatii')
+        .setLabel('Remove Application Role')
+        .setDescription('Select the role to remove from the applications list')
         .setRoleSelectMenuComponent(roleSelect);
 
     modal.addLabelComponents(roleLabel);
@@ -1049,7 +1050,7 @@ async function handleRoleRemove(selectInteraction, rootInteraction, settings, ro
 
         if (index === -1) {
             await modalSubmission.reply({
-                embeds: [errorEmbed('negasit', `<@&${roleId}> nu se afla in lista de roluri din aplicatie.`)],
+                embeds: [errorEmbed('Not Found', `<@&${roleId}> is not in the application roles list.`)],
                 flags: MessageFlags.Ephemeral,
             });
             return;
@@ -1059,7 +1060,7 @@ async function handleRoleRemove(selectInteraction, rootInteraction, settings, ro
         await saveApplicationRoles(client, guildId, roles);
 
         await modalSubmission.reply({
-            embeds: [successEmbed('✅ rol eliminat', `<@&${roleId}> a fost eliminat din rolurile aplicatiei.`)],
+            embeds: [successEmbed('✅ Role Removed', `<@&${roleId}> has been removed from the application roles.`)],
             flags: MessageFlags.Ephemeral,
         });
 
@@ -1068,7 +1069,7 @@ async function handleRoleRemove(selectInteraction, rootInteraction, settings, ro
         if (error.code === 'INTERACTION_TIMEOUT') return;
         logger.error('Error in role remove modal:', error);
         await selectInteraction.followUp({
-            embeds: [errorEmbed('A aparut o eroare la eliminarea rolului din aplicatie.')],
+            embeds: [errorEmbed('An error occurred while removing the application role.')],
             flags: MessageFlags.Ephemeral,
         });
     }
@@ -1079,17 +1080,17 @@ async function handleRoleRemove(selectInteraction, rootInteraction, settings, ro
 async function handleRetention(selectInteraction, rootInteraction, settings, roles, guildId, client) {
     const modal = new ModalBuilder()
         .setCustomId('app_cfg_retention')
-        .setTitle('Perioadele de pastrare a aplicatiilor');
+        .setTitle('Application Retention Periods');
 
     const retentionInfo = new TextDisplayBuilder()
         .setContent(
-            '**In asteptare** — cat timp sunt pastrate aplicatiile fara raspuns/în curs de procesare înainte de a fi eliminate automat.\n' +
-            '**Revizuit** — cat timp sunt pastrate cererile aprobate sau respinse.\n' +
-            '-# Introduceti un numar intreg intre 1 și 3650 (max 10 ani).',
+            '**Pending** — how long unanswered/in-progress applications are kept before being automatically removed.\n' +
+            '**Reviewed** — how long approved or denied applications are kept.\n' +
+            '-# Enter a whole number between 1 and 3650 (max 10 years).',
         );
 
     const pendingLabel = new LabelBuilder()
-        .setLabel('in asteptarea retinerii (days)')
+        .setLabel('Pending retention (days)')
         .setTextInputComponent(
             new TextInputBuilder()
                 .setCustomId('pending_days')
@@ -1101,7 +1102,7 @@ async function handleRetention(selectInteraction, rootInteraction, settings, rol
         );
 
     const reviewedLabel = new LabelBuilder()
-        .setLabel('Retentie revizuită (days)')
+        .setLabel('Reviewed retention (days)')
         .setTextInputComponent(
             new TextInputBuilder()
                 .setCustomId('reviewed_days')
@@ -1133,7 +1134,7 @@ async function handleRetention(selectInteraction, rootInteraction, settings, rol
 
     if (isNaN(pendingDays) || pendingDays < 1 || pendingDays > 3650) {
         await submitted.reply({
-            embeds: [errorEmbed('Valoare nevalida', 'Retinerea în asteptare trebuie să fie un numar întreg între **1** și **3650** zile.')],
+            embeds: [errorEmbed('Invalid Value', 'Pending retention must be a whole number between **1** and **3650** days.')],
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -1141,7 +1142,7 @@ async function handleRetention(selectInteraction, rootInteraction, settings, rol
 
     if (isNaN(reviewedDays) || reviewedDays < 1 || reviewedDays > 3650) {
         await submitted.reply({
-            embeds: [errorEmbed('Valoare nevalida', 'Retinerea în asteptare trebuie să fie un numar întreg între **1** și **3650** zile.')],
+            embeds: [errorEmbed('Invalid Value', 'Reviewed retention must be a whole number between **1** and **3650** days.')],
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -1154,8 +1155,8 @@ async function handleRetention(selectInteraction, rootInteraction, settings, rol
     await submitted.reply({
         embeds: [
             successEmbed(
-                '✅ Retinerea a fost actualizata',
-                `Cererile in asteptare vor fi păstrate pentru **${pendingDays} days**.\nCererile evaluate vor fi păstrate pentru **${reviewedDays} zile**.`,
+                '✅ Retention Updated',
+                `Pending applications will be kept for **${pendingDays} days**.\nReviewed applications will be kept for **${reviewedDays} days**.`,
             ),
         ],
         flags: MessageFlags.Ephemeral,
@@ -1172,7 +1173,7 @@ async function handleDeleteApplication(confirmSubmit, selectedRoleId, guildId, r
         const roleIndex = roles.findIndex(r => r.roleId === selectedRoleId);
         if (roleIndex === -1) {
             await confirmSubmit.reply({
-                embeds: [errorEmbed('negasit', 'Rolul aplicatiei nu a fost gasit.')],
+                embeds: [errorEmbed('Not Found', 'Application role not found.')],
                 flags: MessageFlags.Ephemeral,
             });
             return;
@@ -1202,18 +1203,18 @@ async function handleDeleteApplication(confirmSubmit, selectedRoleId, guildId, r
         await confirmSubmit.reply({
             embeds: [
                 successEmbed(
-                    '🗑️ Aplicatie stearsa',
-                    `Aplicatia pentru <@&${selectedRoleId}> (**${deletedRole.name}**) a fost permanent stearsa.\n\n` +
-                    `Stearsa: **${applicationsToDelete.length}** Aplicatia${applicationsToDelete.length !== 1 ? 's' : ''}`,
+                    '🗑️ Application Deleted',
+                    `The application for <@&${selectedRoleId}> (**${deletedRole.name}**) has been permanently deleted.\n\n` +
+                    `Deleted: **${applicationsToDelete.length}** application${applicationsToDelete.length !== 1 ? 's' : ''}`,
                 ),
             ],
             flags: MessageFlags.Ephemeral,
         });
 
     } catch (error) {
-        logger.error('Eroare in handleDeleteApplication:', error);
+        logger.error('Error in handleDeleteApplication:', error);
         await confirmSubmit.reply({
-            embeds: [errorEmbed('Eroare', 'A aparut o eroare la stergerea aplicatiei. Va rugam să incercati din nou.')],
+            embeds: [errorEmbed('Error', 'An error occurred while deleting the application. Please try again.')],
             flags: MessageFlags.Ephemeral,
         });
     }
