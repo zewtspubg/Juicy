@@ -21,7 +21,7 @@ export default {
                 .setDescription('seteaza-ti ziua de nastere!')
                 .addIntegerOption(option =>
                     option
-                        .setName('Luna')
+                        .setName('month')
                         .setDescription('Luna nasterii (1-12)')
                         .setRequired(true)
                         .setMinValue(1)
@@ -29,7 +29,7 @@ export default {
                 )
                 .addIntegerOption(option =>
                     option
-                        .setName('Ziua')
+                        .setName('day')
                         .setDescription('Ziua nasterii(1-31)')
                         .setRequired(true)
                         .setMinValue(1)
