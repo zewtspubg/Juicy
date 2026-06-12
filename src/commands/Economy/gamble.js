@@ -9,7 +9,7 @@ const BASE_WIN_CHANCE = 0.4;
 const CLOVER_WIN_BONUS = 0.1;
 const CHARM_WIN_BONUS = 0.08;
 const PAYOUT_MULTIPLIER = 2.0;
-const GAMBLE_COOLDOWN = 5 * 60 * 1000;
+const GAMBLE_COOLDOWN = .5 * 5 * 1000;
 
 export default {
     data: new SlashCommandBuilder()
